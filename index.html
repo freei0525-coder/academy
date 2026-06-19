@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>학원 체크</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{
+  --bg:#fff;--bg2:#f7f7f5;--bg3:#f0efeb;
+  --text:#1a1a18;--text2:#6b6b66;--text3:#9b9b96;
+  --border:rgba(0,0,0,.09);--border2:rgba(0,0,0,.16);
+  --r:12px;--rs:8px;
+  --green-bg:#eaf3de;--green:#2d6a0a;
+  --blue-bg:#e6f1fb;--blue:#145298;
+  --red-bg:#fcebeb;--red:#9b2020;
+  --amber:#7a4800;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;--text:#f0efeb;--text2:#9b9b96;--text3:#6b6b66;--border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.16);--green-bg:#162e08;--green:#90d050;--blue-bg:#091c32;--blue:#5aaaf5;--red-bg:#2e0808;--red:#f07070;--amber:#f0a840;}
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:var(--text)}
+
+/* ── SETUP ── */
+#setup{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem}
+.logo{font-size:48px;margin-bottom:.4rem}
+.stitle{font-size:24px;font-weight:700;margin-bottom:6px}
+.ssub{font-size:14px;color:var(--text2);margin-bottom:2rem;text-align:center;line-height:1.7}
+.scard{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:1.5rem;width:100%;max-width:340px}
+.slabel{font-size:12px;color:var(--text2);font-weight:500;margin-bottom:8px;letter-spacing:.04em}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.2rem}
+.rbtn{padding:1rem;border:0.5px solid var(--border2);border-radius:var(--rs);background:var(--bg2);cursor:pointer;text-align:center;transition:all .15s}
+.rbtn.sel{border:2px solid var(--text);background:var(--bg)}
+.rbtn .ri{font-size:28px;margin-bottom:6px}
+.rbtn .rn{font-size:14px;font-weight:600}
+.rbtn .rd{font-size:11px;color:var(--text2);margin-top:2px}
+.codewrap{margin-bottom:1.2rem}
+.codewrap input{width:100%;padding:11px 14px;font-size:20px;letter-spacing:.25em;text-align:center;border:0.5px solid var(--border2);border-radius:var(--rs);background:var(--bg);color:var(--text);outline:none;font-weight:700}
+.codewrap input:focus{border-color:var(--text)}
+.codehint{font-size:11px;color:var(--text3);margin-top:6px;text-align:center;line-height:1.6}
+.startbtn{width:100%;padding:13px;font-size:15px;font-weight:600;background:var(--text);color:var(--bg);border:none;border-radius:var(--rs);cursor:pointer}
+.startbtn:active{opacity:.8}
+.adminlink{display:none;text-align:center;margin-top:10px}
+.adminlink button{font-size:12px;color:var(--text3);background:transparent;border:none;cursor:pointer;text-decoration:underline}
+
+/* ── CONFIG NOTICE ── */
+#config-notice{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center;padding:1rem}
+#config-notice.show{display:flex}
+.cn-box{background:var(--bg);border-radius:var(--r);padding:1.5rem;max-width:360px;width:100%}
+.cn-box h2{font-size:17px;font-weight:700;margin-bottom:12px}
+.cn-box p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:8px}
+.cn-box code{background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace}
+.cn-close{width:100%;padding:11px;font-size:14px;font-weight:600;background:var(--text);color:var(--bg);border:none;border-radius:var(--rs);cursor:pointer;margin-top:12px}
+
+/* ── APP ── */
+#app{display:none;flex-direction:column;min-height:100vh}
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 16px 0;position:sticky;top:0;z-index:50}
+.tbrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.appname{font-size:17px;font-weight:700}
+.tbright{display:flex;align-items:center;gap:10px}
+.ldot{width:7px;height:7px;border-radius:50%;background:#ccc;display:inline-block;margin-right:4px;transition:background .4s}
+.ldot.on{background:#4caf50}
+.ltxt{font-size:11px;color:var(--text2)}
+.rbadge{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--bg2);color:var(--text2);font-weight:500}
+.logoutbtn{font-size:11px;color:var(--text3);background:transparent;border:none;cursor:pointer}
+.dayrow{display:flex;gap:4px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none}
+.dayrow::-webkit-scrollbar{display:none}
+.dtab{padding:5px 13px;font-size:13px;font-weight:500;border-radius:20px;border:0.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.dtab.on{background:var(--text);color:var(--bg);border-color:transparent}
+
+.content{flex:1;padding:14px}
+
+/* stat */
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.statbox{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center}
+.statn{font-size:22px;font-weight:700}
+.statl{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* cards */
+.sc{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:13px 15px;margin-bottom:9px}
+.sc.arrived{border-left:3px solid #4caf50}
+.sc.done{border-left:3px solid #2196f3}
+.sc.absent{border-left:3px solid #f44336}
+.schead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px}
+.scname{font-size:16px;font-weight:600}
+.sctime{font-size:12px;color:var(--text2);margin-top:3px}
+.pill{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;flex-shrink:0;margin-left:8px}
+.p-none{background:var(--bg2);color:var(--text2)}
+.p-arrived{background:var(--green-bg);color:var(--green)}
+.p-done{background:var(--blue-bg);color:var(--blue)}
+.p-absent{background:var(--red-bg);color:var(--red)}
+.actrow{display:flex;gap:7px;flex-wrap:wrap}
+.ab{padding:9px 16px;font-size:13px;font-weight:500;border-radius:var(--rs);border:0.5px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;transition:all .15s;flex:1}
+.ab:active{transform:scale(.97)}
+.ab.g{background:var(--green-bg);color:var(--green);border-color:transparent}
+.ab.b{background:var(--blue-bg);color:var(--blue);border-color:transparent}
+.ab.r{background:var(--red-bg);color:var(--red);border-color:transparent}
+.ab.m{color:var(--text2);font-size:12px;flex:none;padding:9px 12px}
+
+/* add form */
+.addcard{background:var(--bg);border:0.5px dashed var(--border2);border-radius:var(--r);padding:14px 15px;margin-bottom:12px}
+.addcard h3{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:11px}
+.frow{display:flex;gap:7px;margin-bottom:8px}
+.frow input,.frow select{flex:1;padding:9px 10px;font-size:13px;border:0.5px solid var(--border2);border-radius:var(--rs);background:var(--bg);color:var(--text);outline:none;min-width:0}
+.frow input:focus,.frow select:focus{border-color:var(--text)}
+.addbtn{width:100%;padding:10px;font-size:14px;font-weight:600;background:var(--text);color:var(--bg);border:none;border-radius:var(--rs);cursor:pointer}
+.addbtn:active{opacity:.8}
+
+/* bottom nav */
+.bnav{display:none;position:sticky;bottom:0;background:var(--bg);border-top:0.5px solid var(--border);z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+.bnav.show{display:flex}
+.nb{flex:1;padding:8px 4px;text-align:center;cursor:pointer;border:none;background:transparent}
+.nb .ni{font-size:20px}
+.nb .nl{font-size:10px;color:var(--text2);display:block;margin-top:2px}
+.nb.on .nl{color:var(--text);font-weight:600}
+
+/* overlay */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.ov.open{display:flex}
+.ovbox{background:var(--bg);border-radius:var(--r) var(--r) 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));width:100%;max-width:480px}
+.ovtitle{font-size:16px;font-weight:600;margin-bottom:16px}
+.fg{margin-bottom:11px}
+.fg label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px}
+.fg input,.fg select{width:100%;padding:10px;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--rs);background:var(--bg);color:var(--text);outline:none}
+.trow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ovbtns{display:flex;gap:8px;margin-top:16px}
+.ovbtns button{flex:1;padding:11px;font-size:14px;font-weight:500;border-radius:var(--rs);cursor:pointer;border:0.5px solid var(--border2);background:var(--bg2);color:var(--text)}
+.ovbtns .sv{background:var(--text);color:var(--bg);border-color:transparent}
+
+/* edit btns */
+.edrow{display:flex;gap:6px;flex-shrink:0;margin-left:8px}
+.edbtn{padding:5px 11px;font-size:12px;border-radius:var(--rs);border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer}
+.edbtn.del{color:var(--red)}
+
+/* ── WEEKLY VIEW ── */
+.week-wrap{display:flex;flex-direction:column;gap:10px}
+.week-day{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden}
+.week-day-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;user-select:none}
+.week-day-label{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.today-mark{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--amber);color:#fff;font-weight:600}
+.week-day-meta{display:flex;align-items:center;gap:6px}
+.week-count{font-size:12px;color:var(--text2)}
+.week-dots{display:flex;gap:3px}
+.wd{width:8px;height:8px;border-radius:50%;background:var(--bg3)}
+.wd.arrived,.wd.done{background:#4caf50}
+.wd.absent{background:#f44336}
+.wd.none{background:var(--bg3);border:0.5px solid var(--border2)}
+.week-items{padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.week-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--rs);background:var(--bg2)}
+.wi-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0;background:var(--border2)}
+.wi-bar.arrived,.wi-bar.done{background:#4caf50}
+.wi-bar.done{background:#2196f3}
+.wi-bar.absent{background:#f44336}
+.wi-info{flex:1;min-width:0}
+.wi-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wi-time{font-size:11px;color:var(--text2);margin-top:2px}
+.wi-pill{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:500;flex-shrink:0}
+.week-empty{padding:14px;text-align:center;font-size:13px;color:var(--text3)}
+.week-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.ws-box{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center}
+.ws-n{font-size:20px;font-weight:700}
+.ws-l{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(26,26,24,.9);color:#f0efeb;padding:10px 20px;border-radius:30px;font-size:13px;z-index:400;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px;line-height:2.2}
+.empty .ei{font-size:36px;display:block}
+</style>
+</head>
+<body>
+
+<!-- ── SETUP ── -->
+<div id="setup">
+  <div class="logo">📚</div>
+  <div class="stitle">학원 체크</div>
+  <div class="ssub">아이 학원 출석을<br>아빠가 실시간으로 확인해요</div>
+  <div class="scard">
+    <div class="slabel">나는 누구인가요?</div>
+    <div class="role-grid">
+      <div class="rbtn" id="rb-child" onclick="pickRole('child')">
+        <div class="ri">🎒</div><div class="rn">아이</div><div class="rd">도착·종료 체크</div>
+      </div>
+      <div class="rbtn" id="rb-parent" onclick="pickRole('parent')">
+        <div class="ri">👨</div><div class="rn">아빠</div><div class="rd">현황 확인</div>
+      </div>
+    </div>
+    <div class="slabel">가족 코드 (숫자 4자리)</div>
+    <div class="codewrap">
+      <input type="text" id="room-in" maxlength="8" placeholder="1234" inputmode="numeric">
+      <div class="codehint">아이·아빠 폰에 같은 코드 입력<br>→ 자동으로 연동돼요</div>
+    </div>
+    <button class="startbtn" onclick="enter()">시작하기 →</button>
+    <div class="adminlink" id="admin-link">
+      <button onclick="pickRole('admin');enter()">⚙️ 관리자 모드 (스케줄 편집)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FIREBASE 설정 안내 (미설정 시 표시) ── -->
+<div id="config-notice">
+  <div class="cn-box">
+    <h2>🔧 Firebase 설정이 필요해요</h2>
+    <p>두 폰을 실시간으로 연동하려면<br><strong>index.html</strong> 파일 상단의<br>Firebase 설정값을 채워넣어야 해요.</p>
+    <p>자세한 방법은 함께 드린<br><code>README.md</code> 파일을 참고해주세요.</p>
+    <p style="margin-top:8px">지금은 <strong>이 폰에서만</strong> 사용할 수 있어요.</p>
+    <button class="cn-close" onclick="document.getElementById('config-notice').classList.remove('show')">확인, 일단 써볼게요</button>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+  <div class="topbar">
+    <div class="tbrow">
+      <div class="appname">📚 학원 체크</div>
+      <div class="tbright">
+        <div><span class="ldot" id="ldot"></span><span class="ltxt" id="ltxt">연결 중</span></div>
+        <span class="rbadge" id="rbadge"></span>
+        <button class="logoutbtn" onclick="logout()">나가기</button>
+      </div>
+    </div>
+    <div class="dayrow" id="day-row"></div>
+  </div>
+  <div class="content" id="content"></div>
+  <div class="bnav" id="bnav">
+    <button class="nb on" id="nb-s" onclick="aview('schedule')"><div class="ni">📅</div><span class="nl">스케줄</span></button>
+    <button class="nb" id="nb-p" onclick="aview('status')"><div class="ni">📊</div><span class="nl">오늘현황</span></button>
+    <button class="nb" id="nb-w" onclick="aview('weekly')"><div class="ni">🗓️</div><span class="nl">주간현황</span></button>
+  </div>
+</div>
+
+<!-- ── EDIT OVERLAY ── -->
+<div class="ov" id="ov">
+  <div class="ovbox">
+    <div class="ovtitle">스케줄 수정</div>
+    <div class="fg"><label>학원 이름</label><input id="ov-name" type="text" placeholder="예: 수학학원"></div>
+    <div class="fg"><label>시작 시간</label><div class="trow"><select id="ov-sh"></select><select id="ov-sm"></select></div></div>
+    <div class="fg"><label>종료 시간</label><div class="trow"><select id="ov-eh"></select><select id="ov-em"></select></div></div>
+    <div class="ovbtns"><button onclick="closeOv()">취소</button><button class="sv" onclick="saveOv()">저장</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+// ═══════════════════════════════════════════════════════════════
+//  🔧 Firebase 설정값 — README.md 를 보고 여기를 채워넣으세요
+// ═══════════════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "AIzaSyD2UV_BbaBnuk2NchvgYbGE3fMnQ8c-gg0",
+  authDomain:        "academy-c6134.firebaseapp.com",
+  databaseURL:       "https://academy-c6134-default-rtdb.firebaseio.com",
+  projectId:         "academy-c6134",
+  storageBucket:     "academy-c6134.firebasestorage.app",
+  messagingSenderId: "614733767231",
+  appId:             "1:614733767231:web:c80a956d7754ea780a4e8a"
+};
+// ═══════════════════════════════════════════════════════════════
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const CONFIGURED = firebaseConfig.apiKey !== "여기에_apiKey_붙여넣기";
+let db = null, unsubscribe = null;
+
+if (CONFIGURED) {
+  const app = initializeApp(firebaseConfig);
+  db = getDatabase(app);
+}
+
+// ── 상태 ────────────────────────────────────────────────────────
+const DAYS = ['월','화','수','목','금','토','일'];
+const MINS = [0,10,20,30,40,50];
+let role='', room='', curDay=DAYS[todayI()];
+let sched = {}; DAYS.forEach(d => sched[d] = []);
+let editItem=null, editDay=null, avView='schedule';
+let alarmTimers={}, titleTaps=0;
+
+function todayI(){ const d=new Date().getDay(); return d===0?6:d-1; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+function hl(h){ return h<12?`오전 ${h}시`:h===12?`오후 12시`:`오후 ${h-12}시`; }
+function tl(h,m){ return hl(h)+(m?` ${m}분`:''); }
+
+// ── Firebase 연동 ────────────────────────────────────────────────
+function dbPath(){ return `rooms/${room}/schedules`; }
+
+function startSync(){
+  if(!db){ setConn(null); loadLocal(); return; }
+  const r = ref(db, dbPath());
+  unsubscribe = onValue(r, snap => {
+    const data = snap.val();
+    if(data){
+      // 상태 변경 감지해서 토스트
+      DAYS.forEach(day => {
+        (data[day]||[]).forEach(ri => {
+          if(!ri) return;
+          const li = sched[day]?.find(i=>i.id===ri.id);
+          if(li && li.status !== ri.status){
+            const m={arrived:`✅ ${ri.name} 도착!`,done:`🏁 ${ri.name} 수업 완료!`,absent:`❌ ${ri.name} 결석`};
+            if(m[ri.status]) showToast(m[ri.status]);
+          }
+        });
+      });
+      DAYS.forEach(d => { sched[d] = (data[d]||[]).filter(Boolean); });
+      saveLocal(); render();
+    }
+    setConn(true);
+  }, () => { setConn(false); loadLocal(); });
+}
+
+async function pushSched(){
+  saveLocal();
+  if(!db) return;
+  await set(ref(db, dbPath()), sched);
+}
+
+async function pushStatus(day, id, status){
+  const it = sched[day].find(i=>i.id===id);
+  if(!it) return;
+  it.status = status;
+  saveLocal();
+  if(!db){ render(); return; }
+  const idx = sched[day].indexOf(it);
+  await update(ref(db, `${dbPath()}/${day}/${idx}`), {status});
+  render();
+}
+
+// ── localStorage ─────────────────────────────────────────────────
+function saveLocal(){ localStorage.setItem('ack_'+room, JSON.stringify(sched)); }
+function loadLocal(){ const d=localStorage.getItem('ack_'+room); if(d){ sched=JSON.parse(d); render(); } }
+
+// ── SETUP ────────────────────────────────────────────────────────
+window.pickRole = function(r){
+  role=r;
+  document.getElementById('rb-child').classList.toggle('sel', r==='child');
+  document.getElementById('rb-parent').classList.toggle('sel', r==='parent');
+};
+document.querySelector('.stitle').addEventListener('click', ()=>{
+  if(++titleTaps>=3) document.getElementById('admin-link').style.display='block';
+});
+window.enter = function(){
+  const c = document.getElementById('room-in').value.trim();
+  if(!role){ showToast('역할을 선택해주세요'); return; }
+  if(!c||c.length<4){ showToast('4자리 이상 코드를 입력해주세요'); return; }
+  room=c;
+  localStorage.setItem('_lr',role); localStorage.setItem('_lc',c);
+  document.getElementById('setup').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('rbadge').textContent = role==='child'?'🎒 아이':role==='parent'?'👨 아빠':'⚙️ 관리자';
+  // 모든 역할에서 하단 네비 표시 (관리자만 스케줄 탭 보임)
+  document.getElementById('bnav').classList.add('show');
+  document.getElementById('nb-s').style.display = role==='admin'?'':'none';
+  // 아이 화면은 오늘현황 탭 숨기고 주간만
+  if(role==='child'){ document.getElementById('nb-p').style.display='none'; }
+  // 기본 active 탭 설정
+  if(role==='child'){ aview('weekly'); }
+  else if(role==='parent'){ aview('status'); }
+  else { aview('schedule'); }
+  if(!CONFIGURED) document.getElementById('config-notice').classList.add('show');
+  buildDayTabs(); startSync(); scheduleAlarms(); requestPerm();
+};
+window.logout = function(){
+  if(unsubscribe) unsubscribe();
+  document.getElementById('app').style.display='none';
+  document.getElementById('setup').style.display='flex';
+  role=''; room='';
+};
+window.addEventListener('load', ()=>{
+  const lr=localStorage.getItem('_lr'), lc=localStorage.getItem('_lc');
+  if(lr&&lc){ document.getElementById('room-in').value=lc; pickRole(lr); }
+});
+
+// ── DAY TABS ─────────────────────────────────────────────────────
+function buildDayTabs(){
+  const el=document.getElementById('day-row'); el.innerHTML='';
+  DAYS.forEach((d,i)=>{
+    const b=document.createElement('button');
+    b.className='dtab'+(d===curDay?' on':'');
+    b.innerHTML=d+(i===todayI()?'<span style="font-size:9px;color:var(--amber);margin-left:3px">●</span>':'');
+    b.onclick=()=>{ curDay=d; buildDayTabs(); render(); };
+    el.appendChild(b);
+  });
+}
+
+// ── CONN ──────────────────────────────────────────────────────────
+function setConn(v){
+  const dot=document.getElementById('ldot'), txt=document.getElementById('ltxt');
+  if(v===true){ dot.classList.add('on'); txt.textContent='실시간 연동'; }
+  else if(v===null){ dot.style.background='#f0b040'; txt.textContent='로컬 모드'; }
+  else{ dot.classList.remove('on'); txt.textContent='연결 끊김'; }
+}
+
+// ── TIME SELECT ───────────────────────────────────────────────────
+function buildHS(el, val){ el.innerHTML=''; for(let h=9;h<=23;h++){ const o=document.createElement('option'); o.value=h; o.textContent=hl(h); if(h===val)o.selected=true; el.appendChild(o); } }
+function buildMS(el, val){ el.innerHTML=''; MINS.forEach(m=>{ const o=document.createElement('option'); o.value=m; o.textContent=m===0?'00분':m+'분'; if(m===val)o.selected=true; el.appendChild(o); }); }
+
+// ── RENDER ────────────────────────────────────────────────────────
+function render(){
+  if(role==='child') renderChild();
+  else if(role==='parent'){
+    if(pView==='weekly') renderParent(); // renderParent handles pView internally
+    else renderParent();
+  }
+  else renderAdmin();
+}
+function pill(st){ const m={none:'대기중',arrived:'✅ 도착',done:'🏁 완료',absent:'❌ 결석'}; return `<span class="pill p-${st}">${m[st]}</span>`; }
+function sorted(day){ return [...(sched[day]||[])].sort((a,b)=>a.h*60+a.m-(b.h*60+b.m)); }
+
+// 아이 화면
+function renderChild(){
+  const el=document.getElementById('content');
+  if(pView==='weekly'){ renderWeeklyInto(el,false); return; }
+  const items=sorted(curDay);
+  if(!items.length){ el.innerHTML='<div class="empty"><span class="ei">🎉</span>오늘은 학원이 없어요!</div>'; return; }
+  el.innerHTML=items.map(it=>{
+    const st=it.status; let acts='';
+    if(st==='none') acts=`<button class="ab g" onclick="setSt('${curDay}','${it.id}','arrived')">✅ 도착했어요</button><button class="ab r" onclick="setSt('${curDay}','${it.id}','absent')">❌ 결석</button>`;
+    else if(st==='arrived') acts=`<button class="ab b" onclick="setSt('${curDay}','${it.id}','done')">🏁 수업 끝났어요</button><button class="ab m" onclick="setSt('${curDay}','${it.id}','none')">되돌리기</button>`;
+    else acts=`<button class="ab m" onclick="setSt('${curDay}','${it.id}','none')">되돌리기</button>`;
+    return `<div class="sc ${st}"><div class="schead"><div><div class="scname">${it.name}</div><div class="sctime">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div>${pill(st)}</div><div class="actrow">${acts}</div></div>`;
+  }).join('');
+}
+
+// 아빠 화면
+function renderParent(){
+  // 아빠는 상단에 탭 버튼 추가
+  const el=document.getElementById('content');
+  const tabBar=`<div style="display:flex;gap:6px;margin-bottom:14px">
+    <button onclick="pTab('today')" id="pt-today" style="flex:1;padding:8px;font-size:13px;font-weight:500;border-radius:var(--rs);border:0.5px solid var(--border2);background:${pView==='today'?'var(--text)':'transparent'};color:${pView==='today'?'var(--bg)':'var(--text2)'};cursor:pointer">오늘 현황</button>
+    <button onclick="pTab('weekly')" id="pt-weekly" style="flex:1;padding:8px;font-size:13px;font-weight:500;border-radius:var(--rs);border:0.5px solid var(--border2);background:${pView==='weekly'?'var(--text)':'transparent'};color:${pView==='weekly'?'var(--bg)':'var(--text2)'};cursor:pointer">주간 현황</button>
+  </div>`;
+  if(pView==='weekly'){ el.innerHTML=tabBar; renderWeeklyInto(el,true); return; }
+  const items=sorted(curDay);
+  const a=items.filter(i=>i.status==='arrived'||i.status==='done').length;
+  const d=items.filter(i=>i.status==='done').length;
+  const ab=items.filter(i=>i.status==='absent').length;
+  let html=tabBar+`<div class="statrow">
+    <div class="statbox"><div class="statn" style="color:var(--green)">${a}</div><div class="statl">도착</div></div>
+    <div class="statbox"><div class="statn" style="color:var(--blue)">${d}</div><div class="statl">완료</div></div>
+    <div class="statbox"><div class="statn" style="color:var(--red)">${ab}</div><div class="statl">결석</div></div>
+  </div>`;
+  if(!items.length){ el.innerHTML=html+'<div class="empty"><span class="ei">📅</span>이 날은 학원이 없어요</div>'; return; }
+  html+=items.map(it=>`<div class="sc ${it.status}"><div class="schead"><div><div class="scname">${it.name}</div><div class="sctime">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div>${pill(it.status)}</div></div>`).join('');
+  el.innerHTML=html;
+}
+
+// 관리자 화면
+let pView='today';
+window.pTab=function(v){ pView=v; renderParent(); };
+window.aview = function(v){
+  avView=v;
+  if(v==='weekly') pView='weekly';
+  else if(v==='status') pView='today';
+  document.getElementById('nb-s').classList.toggle('on',v==='schedule');
+  document.getElementById('nb-p').classList.toggle('on',v==='status');
+  document.getElementById('nb-w').classList.toggle('on',v==='weekly');
+  render();
+};
+function renderAdmin(){
+  if(avView==='status'){ pView='today'; renderParent(); return; }
+  if(avView==='weekly'){ pView='weekly'; renderParent(); return; }
+  const items=sorted(curDay), el=document.getElementById('content');
+  const hOpts=Array.from({length:15},(_,i)=>i+9).map(h=>`<option value="${h}">${hl(h)}</option>`).join('');
+  const mOpts=MINS.map(m=>`<option value="${m}">${m===0?'00분':m+'분'}</option>`).join('');
+  let html=`<div class="addcard"><h3>+ 학원 추가</h3>
+    <div class="frow"><input id="nn" type="text" placeholder="학원 이름"></div>
+    <div class="frow" style="align-items:center"><span style="font-size:12px;color:var(--text2);white-space:nowrap">시작</span><select id="nsh">${hOpts}</select><select id="nsm">${mOpts}</select></div>
+    <div class="frow" style="align-items:center"><span style="font-size:12px;color:var(--text2);white-space:nowrap">종료</span><select id="neh">${hOpts}</select><select id="nem">${mOpts}</select></div>
+    <button class="addbtn" onclick="addSched()">추가하기</button>
+  </div>`;
+  if(!items.length) html+='<div class="empty"><span class="ei">📝</span>학원을 추가해보세요</div>';
+  else html+=items.map(it=>`<div class="sc"><div class="schead"><div><div class="scname">${it.name}</div><div class="sctime">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div><div class="edrow"><button class="edbtn" onclick="openOv('${curDay}','${it.id}')">수정</button><button class="edbtn del" onclick="delSched('${curDay}','${it.id}')">삭제</button></div></div></div>`).join('');
+  el.innerHTML=html;
+  const nsh=document.getElementById('nsh'), neh=document.getElementById('neh');
+  if(nsh&&neh){ nsh.addEventListener('change',()=>{ neh.value=Math.min(parseInt(nsh.value)+1,23); }); neh.value=10; }
+}
+
+// ── 주간 현황 렌더 ─────────────────────────────────────────────────
+function renderWeeklyInto(container, appendMode){
+  const ti=todayI();
+  // 주간 전체 통계
+  let totalAll=0,totalArrived=0,totalDone=0,totalAbsent=0;
+  DAYS.forEach(d=>{
+    const items=sched[d]||[];
+    totalAll+=items.length;
+    totalArrived+=items.filter(i=>i.status==='arrived'||i.status==='done').length;
+    totalDone+=items.filter(i=>i.status==='done').length;
+    totalAbsent+=items.filter(i=>i.status==='absent').length;
+  });
+  let html=`<div class="week-summary">
+    <div class="ws-box"><div class="ws-n">${totalAll}</div><div class="ws-l">이번주 수업</div></div>
+    <div class="ws-box"><div class="ws-n" style="color:var(--green)">${totalArrived}</div><div class="ws-l">도착 완료</div></div>
+    <div class="ws-box"><div class="ws-n" style="color:var(--red)">${totalAbsent}</div><div class="ws-l">결석</div></div>
+  </div><div class="week-wrap">`;
+  DAYS.forEach((d,i)=>{
+    const items=sorted(d);
+    const isToday=i===ti;
+    const dots=items.map(it=>`<span class="wd ${it.status}"></span>`).join('');
+    const countTxt=items.length?`${items.length}개`:'-';
+    const itemsHtml=items.length
+      ? items.map(it=>{
+          const stLabel={none:'대기',arrived:'도착',done:'완료',absent:'결석'};
+          const stColor={none:'var(--text3)',arrived:'var(--green)',done:'var(--blue)',absent:'var(--red)'};
+          return `<div class="week-item">
+            <div class="wi-bar ${it.status}"></div>
+            <div class="wi-info">
+              <div class="wi-name">${it.name}</div>
+              <div class="wi-time">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div>
+            </div>
+            <span class="wi-pill" style="background:${it.status==='none'?'var(--bg3)':it.status==='arrived'?'var(--green-bg)':it.status==='done'?'var(--blue-bg)':'var(--red-bg)'};color:${stColor[it.status]}">${stLabel[it.status]}</span>
+          </div>`;
+        }).join('')
+      : `<div class="week-empty">학원 없음</div>`;
+    html+=`<div class="week-day">
+      <div class="week-day-head" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none'">
+        <div class="week-day-label">
+          ${d}요일${isToday?'<span class="today-mark">오늘</span>':''}
+        </div>
+        <div class="week-day-meta">
+          <span class="week-count">${countTxt}</span>
+          <div class="week-dots">${dots||'<span class="wd none"></span>'}</div>
+        </div>
+      </div>
+      <div class="week-items" style="${items.length===0||!isToday?'':''}">
+        ${itemsHtml}
+      </div>
+    </div>`;
+  });
+  html+='</div>';
+  if(appendMode) container.innerHTML+=html;
+  else container.innerHTML=html;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────
+window.setSt = async function(day,id,status){
+  await pushStatus(day,id,status);
+  const m={arrived:'도착 완료! 아빠한테 전달됐어요 👍',done:'수업 종료! 수고했어요 🎉',absent:'결석 처리됐어요',none:'초기화됐어요'};
+  showToast(m[status]||'');
+};
+window.addSched = async function(){
+  const name=document.getElementById('nn').value.trim();
+  const sh=parseInt(document.getElementById('nsh').value);
+  const sm=parseInt(document.getElementById('nsm').value);
+  const eh=parseInt(document.getElementById('neh').value);
+  const em=parseInt(document.getElementById('nem').value);
+  if(!name){ showToast('학원 이름을 입력해주세요'); return; }
+  if(eh*60+em<=sh*60+sm){ showToast('종료 시간이 시작보다 늦어야 해요'); return; }
+  sched[curDay].push({id:uid(),name,h:sh,m:sm,eh,em,status:'none'});
+  await pushSched(); scheduleAlarms(); render(); showToast('추가됐어요!');
+};
+window.delSched = async function(day,id){
+  if(!confirm('삭제하시겠어요?')) return;
+  sched[day]=sched[day].filter(i=>i.id!==id);
+  await pushSched(); render(); showToast('삭제됐어요');
+};
+
+// OVERLAY
+window.openOv = function(day,id){
+  editDay=day; editItem=sched[day].find(i=>i.id===id); if(!editItem) return;
+  document.getElementById('ov-name').value=editItem.name;
+  buildHS(document.getElementById('ov-sh'),editItem.h);
+  buildMS(document.getElementById('ov-sm'),editItem.m);
+  buildHS(document.getElementById('ov-eh'),editItem.eh);
+  buildMS(document.getElementById('ov-em'),editItem.em);
+  document.getElementById('ov').classList.add('open');
+};
+window.closeOv = function(){ document.getElementById('ov').classList.remove('open'); editItem=null; };
+window.saveOv = async function(){
+  if(!editItem) return;
+  const name=document.getElementById('ov-name').value.trim();
+  const sh=parseInt(document.getElementById('ov-sh').value);
+  const sm=parseInt(document.getElementById('ov-sm').value);
+  const eh=parseInt(document.getElementById('ov-eh').value);
+  const em=parseInt(document.getElementById('ov-em').value);
+  if(!name){ showToast('이름을 입력해주세요'); return; }
+  if(eh*60+em<=sh*60+sm){ showToast('종료 시간이 시작보다 늦어야 해요'); return; }
+  editItem.name=name; editItem.h=sh; editItem.m=sm; editItem.eh=eh; editItem.em=em;
+  await pushSched(); closeOv(); scheduleAlarms(); render(); showToast('수정됐어요!');
+};
+document.getElementById('ov').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeOv(); });
+
+// ── ALARMS ────────────────────────────────────────────────────────
+function requestPerm(){ if(typeof Notification!=='undefined'&&Notification.permission==='default') Notification.requestPermission(); }
+function scheduleAlarms(){
+  Object.values(alarmTimers).forEach(clearTimeout); alarmTimers={};
+  const day=DAYS[todayI()], now=new Date();
+  (sched[day]||[]).forEach(it=>{
+    let ah=it.h, am=it.m-10;
+    if(am<0){ ah--; am+=60; }
+    const alarm=new Date(); alarm.setHours(ah,am,0,0);
+    const diff=alarm-now;
+    if(diff>0&&it.status==='none'){
+      alarmTimers[it.id]=setTimeout(()=>{
+        showToast(`⏰ ${it.name} 10분 후 시작!`);
+        if(typeof Notification!=='undefined'&&Notification.permission==='granted')
+          new Notification('📚 학원 출발 시간!',{body:`${it.name}이(가) 10분 후에 시작해요`,tag:'ack-'+it.id});
+      }, diff);
+    }
+  });
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),3000); }
+
+// global 노출 (inline onclick용)
+window.showToast=showToast;
+</script>
+</body>
+</html>
