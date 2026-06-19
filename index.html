@@ -351,13 +351,11 @@ window.enter = function(){
   document.getElementById('setup').style.display='none';
   document.getElementById('app').style.display='flex';
   document.getElementById('rbadge').textContent = role==='child'?'🎒 아이':role==='parent'?'👨 아빠':'⚙️ 관리자';
-  // 모든 역할에서 하단 네비 표시 (관리자만 스케줄 탭 보임)
   document.getElementById('bnav').classList.add('show');
+  // 관리자만 스케줄 탭 보임
   document.getElementById('nb-s').style.display = role==='admin'?'':'none';
-  // 아이 화면은 오늘현황 탭 숨기고 주간만
-  if(role==='child'){ document.getElementById('nb-p').style.display='none'; }
-  // 기본 active 탭 설정
-  if(role==='child'){ aview('weekly'); }
+  // 아이 기본화면 = 오늘 출석 (도착버튼 있는 화면)
+  if(role==='child'){ aview('status'); }
   else if(role==='parent'){ aview('status'); }
   else { aview('schedule'); }
   if(!CONFIGURED) document.getElementById('config-notice').classList.add('show');
