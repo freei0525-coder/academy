@@ -19,12 +19,15 @@
   --amber:#7a4800;
 }
 @media(prefers-color-scheme:dark){
-  :root{--bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;--text:#f0efeb;--text2:#9b9b96;--text3:#6b6b66;--border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.16);--green-bg:#162e08;--green:#90d050;--blue-bg:#091c32;--blue:#5aaaf5;--red-bg:#2e0808;--red:#f07070;--amber:#f0a840;}
+  :root{--bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;--text:#f0efeb;--text2:#9b9b96;--text3:#6b6b66;
+  --border:rgba(255,255,255,.09);--border2:rgba(255,255,255,.16);
+  --green-bg:#162e08;--green:#90d050;--blue-bg:#091c32;--blue:#5aaaf5;
+  --red-bg:#2e0808;--red:#f07070;--amber:#f0a840;}
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:var(--text)}
 
-/* ── SETUP ── */
+/* SETUP */
 #setup{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem}
 .logo{font-size:48px;margin-bottom:.4rem}
 .stitle{font-size:24px;font-weight:700;margin-bottom:6px}
@@ -46,7 +49,7 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
 .adminlink{display:none;text-align:center;margin-top:10px}
 .adminlink button{font-size:12px;color:var(--text3);background:transparent;border:none;cursor:pointer;text-decoration:underline}
 
-/* ── CONFIG NOTICE ── */
+/* CONFIG NOTICE */
 #config-notice{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center;padding:1rem}
 #config-notice.show{display:flex}
 .cn-box{background:var(--bg);border-radius:var(--r);padding:1.5rem;max-width:360px;width:100%}
@@ -55,7 +58,7 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
 .cn-box code{background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace}
 .cn-close{width:100%;padding:11px;font-size:14px;font-weight:600;background:var(--text);color:var(--bg);border:none;border-radius:var(--rs);cursor:pointer;margin-top:12px}
 
-/* ── APP ── */
+/* APP */
 #app{display:none;flex-direction:column;min-height:100vh}
 .topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 16px 0;position:sticky;top:0;z-index:50}
 .tbrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -70,35 +73,54 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
 .dayrow::-webkit-scrollbar{display:none}
 .dtab{padding:5px 13px;font-size:13px;font-weight:500;border-radius:20px;border:0.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
 .dtab.on{background:var(--text);color:var(--bg);border-color:transparent}
-
 .content{flex:1;padding:14px}
 
-/* stat */
-.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.statbox{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center}
-.statn{font-size:22px;font-weight:700}
-.statl{font-size:11px;color:var(--text2);margin-top:2px}
+/* 아이 출석 화면 강조 */
+.child-header{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;text-align:center}
+.child-header .ch-day{font-size:13px;color:var(--text2);margin-bottom:4px}
+.child-header .ch-title{font-size:18px;font-weight:700}
+.child-header .ch-sub{font-size:12px;color:var(--text2);margin-top:4px}
 
-/* cards */
-.sc{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:13px 15px;margin-bottom:9px}
-.sc.arrived{border-left:3px solid #4caf50}
-.sc.done{border-left:3px solid #2196f3}
-.sc.absent{border-left:3px solid #f44336}
-.schead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px}
-.scname{font-size:16px;font-weight:600}
-.sctime{font-size:12px;color:var(--text2);margin-top:3px}
-.pill{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;flex-shrink:0;margin-left:8px}
+/* 출석 카드 */
+.sc{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;transition:border-color .2s}
+.sc.status-arrived{border-left:4px solid #4caf50}
+.sc.status-done{border-left:4px solid #2196f3}
+.sc.status-absent{border-left:4px solid #f44336}
+.sc.status-none{border-left:4px solid var(--border2)}
+.schead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.scname{font-size:17px;font-weight:700}
+.sctime{font-size:13px;color:var(--text2);margin-top:4px}
+.pill{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500;flex-shrink:0;margin-left:8px;margin-top:2px}
 .p-none{background:var(--bg2);color:var(--text2)}
 .p-arrived{background:var(--green-bg);color:var(--green)}
 .p-done{background:var(--blue-bg);color:var(--blue)}
 .p-absent{background:var(--red-bg);color:var(--red)}
-.actrow{display:flex;gap:7px;flex-wrap:wrap}
-.ab{padding:9px 16px;font-size:13px;font-weight:500;border-radius:var(--rs);border:0.5px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;transition:all .15s;flex:1}
-.ab:active{transform:scale(.97)}
-.ab.g{background:var(--green-bg);color:var(--green);border-color:transparent}
-.ab.b{background:var(--blue-bg);color:var(--blue);border-color:transparent}
-.ab.r{background:var(--red-bg);color:var(--red);border-color:transparent}
-.ab.m{color:var(--text2);font-size:12px;flex:none;padding:9px 12px}
+
+/* 아이 액션 버튼 — 크고 명확하게 */
+.actrow{display:flex;gap:8px;flex-direction:column}
+.ab-main{width:100%;padding:14px;font-size:15px;font-weight:700;border-radius:var(--rs);border:none;cursor:pointer;transition:all .15s;text-align:center}
+.ab-main:active{transform:scale(.98)}
+.ab-arrived{background:var(--green);color:#fff}
+.ab-done{background:var(--blue);color:#fff}
+.ab-absent{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red)}
+.ab-undo{background:var(--bg2);color:var(--text2);border:0.5px solid var(--border2);padding:10px;font-size:13px;width:100%;border-radius:var(--rs);cursor:pointer}
+.ab-row2{display:flex;gap:8px}
+.ab-row2 button{flex:1;padding:12px;font-size:14px;font-weight:600;border-radius:var(--rs);border:none;cursor:pointer}
+
+/* 완료 상태 메시지 */
+.done-msg{text-align:center;padding:12px;background:var(--green-bg);border-radius:var(--rs);color:var(--green);font-size:14px;font-weight:600}
+.absent-msg{text-align:center;padding:12px;background:var(--red-bg);border-radius:var(--rs);color:var(--red);font-size:14px;font-weight:600}
+
+/* 아빠/통계 */
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.statbox{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center}
+.statn{font-size:22px;font-weight:700}
+.statl{font-size:11px;color:var(--text2);margin-top:2px}
+.parent-sc{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:13px 15px;margin-bottom:9px}
+.parent-sc.status-arrived{border-left:4px solid #4caf50}
+.parent-sc.status-done{border-left:4px solid #2196f3}
+.parent-sc.status-absent{border-left:4px solid #f44336}
+.parent-sc.status-none{border-left:4px solid var(--border)}
 
 /* add form */
 .addcard{background:var(--bg);border:0.5px dashed var(--border2);border-radius:var(--r);padding:14px 15px;margin-bottom:12px}
@@ -129,29 +151,27 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
 .ovbtns{display:flex;gap:8px;margin-top:16px}
 .ovbtns button{flex:1;padding:11px;font-size:14px;font-weight:500;border-radius:var(--rs);cursor:pointer;border:0.5px solid var(--border2);background:var(--bg2);color:var(--text)}
 .ovbtns .sv{background:var(--text);color:var(--bg);border-color:transparent}
-
-/* edit btns */
 .edrow{display:flex;gap:6px;flex-shrink:0;margin-left:8px}
 .edbtn{padding:5px 11px;font-size:12px;border-radius:var(--rs);border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer}
 .edbtn.del{color:var(--red)}
 
-/* ── WEEKLY VIEW ── */
+/* WEEKLY VIEW */
 .week-wrap{display:flex;flex-direction:column;gap:10px}
 .week-day{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden}
-.week-day-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;user-select:none}
+.week-day-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--border)}
 .week-day-label{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
 .today-mark{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--amber);color:#fff;font-weight:600}
 .week-day-meta{display:flex;align-items:center;gap:6px}
 .week-count{font-size:12px;color:var(--text2)}
 .week-dots{display:flex;gap:3px}
-.wd{width:8px;height:8px;border-radius:50%;background:var(--bg3)}
+.wd{width:8px;height:8px;border-radius:50%}
 .wd.arrived,.wd.done{background:#4caf50}
 .wd.absent{background:#f44336}
 .wd.none{background:var(--bg3);border:0.5px solid var(--border2)}
 .week-items{padding:8px 10px;display:flex;flex-direction:column;gap:6px}
 .week-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--rs);background:var(--bg2)}
 .wi-bar{width:3px;height:32px;border-radius:2px;flex-shrink:0;background:var(--border2)}
-.wi-bar.arrived,.wi-bar.done{background:#4caf50}
+.wi-bar.arrived{background:#4caf50}
 .wi-bar.done{background:#2196f3}
 .wi-bar.absent{background:#f44336}
 .wi-info{flex:1;min-width:0}
@@ -165,7 +185,7 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
 .ws-l{font-size:11px;color:var(--text2);margin-top:2px}
 
 /* toast */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(26,26,24,.9);color:#f0efeb;padding:10px 20px;border-radius:30px;font-size:13px;z-index:400;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(26,26,24,.92);color:#f0efeb;padding:11px 22px;border-radius:30px;font-size:13px;z-index:400;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1}
 .empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px;line-height:2.2}
 .empty .ei{font-size:36px;display:block}
@@ -173,7 +193,7 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
 </head>
 <body>
 
-<!-- ── SETUP ── -->
+<!-- SETUP -->
 <div id="setup">
   <div class="logo">📚</div>
   <div class="stitle">학원 체크</div>
@@ -200,18 +220,17 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
   </div>
 </div>
 
-<!-- ── FIREBASE 설정 안내 (미설정 시 표시) ── -->
+<!-- CONFIG NOTICE -->
 <div id="config-notice">
   <div class="cn-box">
     <h2>🔧 Firebase 설정이 필요해요</h2>
     <p>두 폰을 실시간으로 연동하려면<br><strong>index.html</strong> 파일 상단의<br>Firebase 설정값을 채워넣어야 해요.</p>
-    <p>자세한 방법은 함께 드린<br><code>README.md</code> 파일을 참고해주세요.</p>
     <p style="margin-top:8px">지금은 <strong>이 폰에서만</strong> 사용할 수 있어요.</p>
     <button class="cn-close" onclick="document.getElementById('config-notice').classList.remove('show')">확인, 일단 써볼게요</button>
   </div>
 </div>
 
-<!-- ── APP ── -->
+<!-- APP -->
 <div id="app">
   <div class="topbar">
     <div class="tbrow">
@@ -226,13 +245,13 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
   </div>
   <div class="content" id="content"></div>
   <div class="bnav" id="bnav">
-    <button class="nb on" id="nb-s" onclick="aview('schedule')"><div class="ni">📅</div><span class="nl">스케줄</span></button>
-    <button class="nb" id="nb-p" onclick="aview('status')"><div class="ni">📊</div><span class="nl">오늘현황</span></button>
+    <button class="nb" id="nb-s" onclick="aview('schedule')"><div class="ni">📅</div><span class="nl">스케줄</span></button>
+    <button class="nb on" id="nb-p" onclick="aview('status')"><div class="ni">📊</div><span class="nl">오늘출석</span></button>
     <button class="nb" id="nb-w" onclick="aview('weekly')"><div class="ni">🗓️</div><span class="nl">주간현황</span></button>
   </div>
 </div>
 
-<!-- ── EDIT OVERLAY ── -->
+<!-- EDIT OVERLAY -->
 <div class="ov" id="ov">
   <div class="ovbox">
     <div class="ovtitle">스케줄 수정</div>
@@ -245,11 +264,10 @@ html,body{height:100%;background:var(--bg3);font-family:-apple-system,'Apple SD 
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK -->
 <script type="module">
-// ═══════════════════════════════════════════════════════════════
-//  🔧 Firebase 설정값 — README.md 를 보고 여기를 채워넣으세요
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+//  🔧 Firebase 설정값을 여기에 붙여넣으세요
+// ═══════════════════════════════════════════════════════
 const firebaseConfig = {
   apiKey:            "AIzaSyD2UV_BbaBnuk2NchvgYbGE3fMnQ8c-gg0",
   authDomain:        "academy-c6134.firebaseapp.com",
@@ -258,34 +276,82 @@ const firebaseConfig = {
   storageBucket:     "academy-c6134.firebasestorage.app",
   messagingSenderId: "614733767231",
   appId:             "1:614733767231:web:c80a956d7754ea780a4e8a"
-};
-// ═══════════════════════════════════════════════════════════════
+};// ═══════════════════════════════════════════════════════
+//  🔔 FCM 푸시 알림용 VAPID 키
+//  Firebase 콘솔 → 프로젝트 설정 → 클라우드 메시징
+//  → 웹 푸시 인증서 → 키 쌍 생성 후 복사
+// ═══════════════════════════════════════════════════════
+const VAPID_KEY = "BFQqZi7uu2Wj18_aUw8_CsyNeakPmVPtLXP_NjJVjn3Hkj3curV2Uu-VPqR69HRD2TOvWj5S8CXMHxugUN_3544";
+// ═══════════════════════════════════════════════════════
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
 const CONFIGURED = firebaseConfig.apiKey !== "여기에_apiKey_붙여넣기";
-let db = null, unsubscribe = null;
+let db = null, messaging = null, unsubscribe = null;
+let myFcmToken = null;
 
 if (CONFIGURED) {
   const app = initializeApp(firebaseConfig);
   db = getDatabase(app);
+  try { messaging = getMessaging(app); } catch(e) {}
 }
 
-// ── 상태 ────────────────────────────────────────────────────────
+// ── 상수/상태 ────────────────────────────────────────────
 const DAYS = ['월','화','수','목','금','토','일'];
 const MINS = [0,10,20,30,40,50];
 let role='', room='', curDay=DAYS[todayI()];
 let sched = {}; DAYS.forEach(d => sched[d] = []);
-let editItem=null, editDay=null, avView='schedule';
-let alarmTimers={}, titleTaps=0;
+let editItem=null, editDay=null, avView='status';
+let alarmTimers={}, missTimers={}, titleTaps=0;
 
 function todayI(){ const d=new Date().getDay(); return d===0?6:d-1; }
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
 function hl(h){ return h<12?`오전 ${h}시`:h===12?`오후 12시`:`오후 ${h-12}시`; }
 function tl(h,m){ return hl(h)+(m?` ${m}분`:''); }
+function todayLabel(){ const days=['일','월','화','수','목','금','토']; return days[new Date().getDay()]+'요일'; }
 
-// ── Firebase 연동 ────────────────────────────────────────────────
+// ── FCM 토큰 등록 ────────────────────────────────────────
+async function registerFCM(){
+  if(!messaging || !CONFIGURED || VAPID_KEY==="여기에_VAPID_KEY_붙여넣기") return;
+  try {
+    const perm = await Notification.requestPermission();
+    if(perm !== 'granted') return;
+    const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+    if(token && db){
+      myFcmToken = token;
+      // 역할별 토큰 저장 (아빠 토큰 = 알림 받을 대상)
+      await set(ref(db, `rooms/${room}/tokens/${role}`), token);
+    }
+    // 포그라운드 메시지 수신
+    onMessage(messaging, payload => {
+      showToast(payload.notification?.body || '알림이 왔어요');
+    });
+  } catch(e){ console.log('FCM 등록 실패:', e); }
+}
+
+// ── 아빠에게 푸시 알림 보내기 (Firebase Functions 호출) ──
+async function notifyParent(title, body){
+  if(!CONFIGURED || !db) return;
+  // 아빠 FCM 토큰 가져오기
+  try {
+    const snap = await get(ref(db, `rooms/${room}/tokens/parent`));
+    const parentToken = snap.val();
+    if(!parentToken) return;
+    // Firebase Realtime DB에 알림 요청 기록 → Cloud Function이 감지해서 FCM 전송
+    const notifRef = ref(db, `rooms/${room}/notifications/${Date.now()}`);
+    await set(notifRef, {
+      to: parentToken,
+      title,
+      body,
+      ts: Date.now(),
+      sent: false
+    });
+  } catch(e){ console.log('알림 전송 실패:', e); }
+}
+
+// ── Firebase DB ───────────────────────────────────────────
 function dbPath(){ return `rooms/${room}/schedules`; }
 
 function startSync(){
@@ -294,18 +360,20 @@ function startSync(){
   unsubscribe = onValue(r, snap => {
     const data = snap.val();
     if(data){
-      // 상태 변경 감지해서 토스트
       DAYS.forEach(day => {
-        (data[day]||[]).forEach(ri => {
-          if(!ri) return;
-          const li = sched[day]?.find(i=>i.id===ri.id);
-          if(li && li.status !== ri.status){
-            const m={arrived:`✅ ${ri.name} 도착!`,done:`🏁 ${ri.name} 수업 완료!`,absent:`❌ ${ri.name} 결석`};
-            if(m[ri.status]) showToast(m[ri.status]);
-          }
-        });
+        const prev = sched[day] ? [...sched[day]] : [];
+        sched[day] = (data[day]||[]).filter(Boolean);
+        // 상태 변경 감지 → 아빠 화면에 토스트
+        if(role==='parent' || role==='admin'){
+          sched[day].forEach(ri => {
+            const pi = prev.find(i=>i.id===ri.id);
+            if(pi && pi.status !== ri.status){
+              const m = {arrived:`✅ ${ri.name} 도착!`, done:`🏁 ${ri.name} 수업 완료!`, absent:`❌ ${ri.name} 결석`};
+              if(m[ri.status]) showToast(m[ri.status]);
+            }
+          });
+        }
       });
-      DAYS.forEach(d => { sched[d] = (data[d]||[]).filter(Boolean); });
       saveLocal(); render();
     }
     setConn(true);
@@ -323,17 +391,29 @@ async function pushStatus(day, id, status){
   if(!it) return;
   it.status = status;
   saveLocal();
-  if(!db){ render(); return; }
-  const idx = sched[day].indexOf(it);
-  await update(ref(db, `${dbPath()}/${day}/${idx}`), {status});
   render();
+  if(!db) return;
+  const idx = sched[day].indexOf(it);
+  await update(ref(db, `${dbPath()}/${day}/${idx}`), { status });
+  // 아이가 체크하면 아빠에게 푸시 알림
+  if(role==='child'){
+    const msgs = {
+      arrived: `✅ ${it.name} 도착했어요!`,
+      done:    `🏁 ${it.name} 수업 끝났어요!`,
+      absent:  `❌ ${it.name} 결석 처리됐어요`
+    };
+    if(msgs[status]) await notifyParent('📚 학원 체크', msgs[status]);
+  }
 }
 
-// ── localStorage ─────────────────────────────────────────────────
+// ── localStorage ──────────────────────────────────────────
 function saveLocal(){ localStorage.setItem('ack_'+room, JSON.stringify(sched)); }
-function loadLocal(){ const d=localStorage.getItem('ack_'+room); if(d){ sched=JSON.parse(d); render(); } }
+function loadLocal(){
+  const d = localStorage.getItem('ack_'+room);
+  if(d){ try{ sched=JSON.parse(d); }catch(e){} render(); }
+}
 
-// ── SETUP ────────────────────────────────────────────────────────
+// ── SETUP ─────────────────────────────────────────────────
 window.pickRole = function(r){
   role=r;
   document.getElementById('rb-child').classList.toggle('sel', r==='child');
@@ -351,18 +431,18 @@ window.enter = function(){
   document.getElementById('setup').style.display='none';
   document.getElementById('app').style.display='flex';
   document.getElementById('rbadge').textContent = role==='child'?'🎒 아이':role==='parent'?'👨 아빠':'⚙️ 관리자';
+  // 하단 탭 — 관리자만 스케줄 탭 보임
   document.getElementById('bnav').classList.add('show');
-  // 관리자만 스케줄 탭 보임
-  document.getElementById('nb-s').style.display = role==='admin'?'':'none';
-  // 아이 기본화면 = 오늘 출석 (도착버튼 있는 화면)
-  if(role==='child'){ aview('status'); }
-  else if(role==='parent'){ aview('status'); }
-  else { aview('schedule'); }
+  document.getElementById('nb-s').style.display = role==='admin' ? '' : 'none';
   if(!CONFIGURED) document.getElementById('config-notice').classList.add('show');
-  buildDayTabs(); startSync(); scheduleAlarms(); requestPerm();
+  avView='status';
+  buildDayTabs(); startSync(); scheduleAlarms(); registerFCM();
+  render();
 };
 window.logout = function(){
   if(unsubscribe) unsubscribe();
+  Object.values(alarmTimers).forEach(clearTimeout);
+  Object.values(missTimers).forEach(clearTimeout);
   document.getElementById('app').style.display='none';
   document.getElementById('setup').style.display='flex';
   role=''; room='';
@@ -372,7 +452,7 @@ window.addEventListener('load', ()=>{
   if(lr&&lc){ document.getElementById('room-in').value=lc; pickRole(lr); }
 });
 
-// ── DAY TABS ─────────────────────────────────────────────────────
+// ── DAY TABS ──────────────────────────────────────────────
 function buildDayTabs(){
   const el=document.getElementById('day-row'); el.innerHTML='';
   DAYS.forEach((d,i)=>{
@@ -384,7 +464,7 @@ function buildDayTabs(){
   });
 }
 
-// ── CONN ──────────────────────────────────────────────────────────
+// ── CONN ──────────────────────────────────────────────────
 function setConn(v){
   const dot=document.getElementById('ldot'), txt=document.getElementById('ltxt');
   if(v===true){ dot.classList.add('on'); txt.textContent='실시간 연동'; }
@@ -392,75 +472,130 @@ function setConn(v){
   else{ dot.classList.remove('on'); txt.textContent='연결 끊김'; }
 }
 
-// ── TIME SELECT ───────────────────────────────────────────────────
-function buildHS(el, val){ el.innerHTML=''; for(let h=9;h<=23;h++){ const o=document.createElement('option'); o.value=h; o.textContent=hl(h); if(h===val)o.selected=true; el.appendChild(o); } }
-function buildMS(el, val){ el.innerHTML=''; MINS.forEach(m=>{ const o=document.createElement('option'); o.value=m; o.textContent=m===0?'00분':m+'분'; if(m===val)o.selected=true; el.appendChild(o); }); }
+// ── TIME SELECT ───────────────────────────────────────────
+function buildHS(el,val){ el.innerHTML=''; for(let h=9;h<=23;h++){ const o=document.createElement('option'); o.value=h; o.textContent=hl(h); if(h===val)o.selected=true; el.appendChild(o); } }
+function buildMS(el,val){ el.innerHTML=''; MINS.forEach(m=>{ const o=document.createElement('option'); o.value=m; o.textContent=m===0?'00분':m+'분'; if(m===val)o.selected=true; el.appendChild(o); }); }
 
-// ── RENDER ────────────────────────────────────────────────────────
-function render(){
-  if(role==='child') renderChild();
-  else if(role==='parent'){
-    if(pView==='weekly') renderParent(); // renderParent handles pView internally
-    else renderParent();
-  }
-  else renderAdmin();
-}
-function pill(st){ const m={none:'대기중',arrived:'✅ 도착',done:'🏁 완료',absent:'❌ 결석'}; return `<span class="pill p-${st}">${m[st]}</span>`; }
-function sorted(day){ return [...(sched[day]||[])].sort((a,b)=>a.h*60+a.m-(b.h*60+b.m)); }
-
-// 아이 화면
-function renderChild(){
-  const el=document.getElementById('content');
-  if(pView==='weekly'){ renderWeeklyInto(el,false); return; }
-  const items=sorted(curDay);
-  if(!items.length){ el.innerHTML='<div class="empty"><span class="ei">🎉</span>오늘은 학원이 없어요!</div>'; return; }
-  el.innerHTML=items.map(it=>{
-    const st=it.status; let acts='';
-    if(st==='none') acts=`<button class="ab g" onclick="setSt('${curDay}','${it.id}','arrived')">✅ 도착했어요</button><button class="ab r" onclick="setSt('${curDay}','${it.id}','absent')">❌ 결석</button>`;
-    else if(st==='arrived') acts=`<button class="ab b" onclick="setSt('${curDay}','${it.id}','done')">🏁 수업 끝났어요</button><button class="ab m" onclick="setSt('${curDay}','${it.id}','none')">되돌리기</button>`;
-    else acts=`<button class="ab m" onclick="setSt('${curDay}','${it.id}','none')">되돌리기</button>`;
-    return `<div class="sc ${st}"><div class="schead"><div><div class="scname">${it.name}</div><div class="sctime">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div>${pill(st)}</div><div class="actrow">${acts}</div></div>`;
-  }).join('');
-}
-
-// 아빠 화면
-function renderParent(){
-  // 아빠는 상단에 탭 버튼 추가
-  const el=document.getElementById('content');
-  const tabBar=`<div style="display:flex;gap:6px;margin-bottom:14px">
-    <button onclick="pTab('today')" id="pt-today" style="flex:1;padding:8px;font-size:13px;font-weight:500;border-radius:var(--rs);border:0.5px solid var(--border2);background:${pView==='today'?'var(--text)':'transparent'};color:${pView==='today'?'var(--bg)':'var(--text2)'};cursor:pointer">오늘 현황</button>
-    <button onclick="pTab('weekly')" id="pt-weekly" style="flex:1;padding:8px;font-size:13px;font-weight:500;border-radius:var(--rs);border:0.5px solid var(--border2);background:${pView==='weekly'?'var(--text)':'transparent'};color:${pView==='weekly'?'var(--bg)':'var(--text2)'};cursor:pointer">주간 현황</button>
-  </div>`;
-  if(pView==='weekly'){ el.innerHTML=tabBar; renderWeeklyInto(el,true); return; }
-  const items=sorted(curDay);
-  const a=items.filter(i=>i.status==='arrived'||i.status==='done').length;
-  const d=items.filter(i=>i.status==='done').length;
-  const ab=items.filter(i=>i.status==='absent').length;
-  let html=tabBar+`<div class="statrow">
-    <div class="statbox"><div class="statn" style="color:var(--green)">${a}</div><div class="statl">도착</div></div>
-    <div class="statbox"><div class="statn" style="color:var(--blue)">${d}</div><div class="statl">완료</div></div>
-    <div class="statbox"><div class="statn" style="color:var(--red)">${ab}</div><div class="statl">결석</div></div>
-  </div>`;
-  if(!items.length){ el.innerHTML=html+'<div class="empty"><span class="ei">📅</span>이 날은 학원이 없어요</div>'; return; }
-  html+=items.map(it=>`<div class="sc ${it.status}"><div class="schead"><div><div class="scname">${it.name}</div><div class="sctime">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div>${pill(it.status)}</div></div>`).join('');
-  el.innerHTML=html;
-}
-
-// 관리자 화면
-let pView='today';
-window.pTab=function(v){ pView=v; renderParent(); };
+// ── VIEW 전환 ─────────────────────────────────────────────
 window.aview = function(v){
   avView=v;
-  if(v==='weekly') pView='weekly';
-  else if(v==='status') pView='today';
   document.getElementById('nb-s').classList.toggle('on',v==='schedule');
   document.getElementById('nb-p').classList.toggle('on',v==='status');
   document.getElementById('nb-w').classList.toggle('on',v==='weekly');
   render();
 };
+
+// ── RENDER ────────────────────────────────────────────────
+function render(){
+  if(role==='child') renderChild();
+  else if(role==='parent') renderParent();
+  else renderAdmin();
+}
+
+function pill(st){
+  const m={none:'대기중',arrived:'✅ 도착',done:'🏁 완료',absent:'❌ 결석'};
+  return `<span class="pill p-${st}">${m[st]}</span>`;
+}
+function sorted(day){ return [...(sched[day]||[])].sort((a,b)=>a.h*60+a.m-(b.h*60+b.m)); }
+
+// ── 아이 화면 ─────────────────────────────────────────────
+function renderChild(){
+  const el = document.getElementById('content');
+
+  // 주간 뷰
+  if(avView==='weekly'){ renderWeeklyInto(el); return; }
+
+  // 오늘 출석 화면
+  const items = sorted(curDay);
+  const isToday = (curDay === DAYS[todayI()]);
+  let html = `<div class="child-header">
+    <div class="ch-day">${curDay}요일</div>
+    <div class="ch-title">📋 학원 출석 체크</div>
+    <div class="ch-sub">${isToday ? '오늘 학원 일정이에요' : '이 날의 학원 일정이에요'}</div>
+  </div>`;
+
+  if(!items.length){
+    el.innerHTML = html + '<div class="empty"><span class="ei">🎉</span>이 날은 학원이 없어요!</div>';
+    return;
+  }
+
+  html += items.map(it => {
+    const st = it.status;
+    let actions = '';
+
+    if(st === 'none'){
+      // 대기 → 도착했어요 / 결석 버튼
+      actions = `
+        <button class="ab-main ab-arrived" onclick="setSt('${curDay}','${it.id}','arrived')">
+          ✅ 도착했어요
+        </button>
+        <div class="ab-row2" style="margin-top:8px">
+          <button style="background:var(--red-bg);color:var(--red);border:0.5px solid var(--red);border-radius:var(--rs);cursor:pointer" onclick="setSt('${curDay}','${it.id}','absent')">❌ 결석</button>
+        </div>`;
+    } else if(st === 'arrived'){
+      // 도착 → 수업 끝났어요 버튼
+      actions = `
+        <button class="ab-main ab-done" onclick="setSt('${curDay}','${it.id}','done')">
+          🏁 수업 끝났어요
+        </button>
+        <button class="ab-undo" style="margin-top:8px" onclick="setSt('${curDay}','${it.id}','none')">↩ 되돌리기</button>`;
+    } else if(st === 'done'){
+      actions = `
+        <div class="done-msg">🎉 수업 완료! 수고했어요</div>
+        <button class="ab-undo" style="margin-top:8px" onclick="setSt('${curDay}','${it.id}','none')">↩ 되돌리기</button>`;
+    } else if(st === 'absent'){
+      actions = `
+        <div class="absent-msg">😢 결석 처리됐어요</div>
+        <button class="ab-undo" style="margin-top:8px" onclick="setSt('${curDay}','${it.id}','none')">↩ 되돌리기</button>`;
+    }
+
+    return `<div class="sc status-${st}">
+      <div class="schead">
+        <div>
+          <div class="scname">${it.name}</div>
+          <div class="sctime">⏰ ${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div>
+        </div>
+        ${pill(st)}
+      </div>
+      <div class="actrow">${actions}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+// ── 아빠 화면 ─────────────────────────────────────────────
+function renderParent(){
+  const el = document.getElementById('content');
+  if(avView==='weekly'){ renderWeeklyInto(el); return; }
+
+  const items = sorted(curDay);
+  const a = items.filter(i=>i.status==='arrived'||i.status==='done').length;
+  const d = items.filter(i=>i.status==='done').length;
+  const ab = items.filter(i=>i.status==='absent').length;
+
+  let html = `<div class="statrow">
+    <div class="statbox"><div class="statn" style="color:var(--green)">${a}</div><div class="statl">도착</div></div>
+    <div class="statbox"><div class="statn" style="color:var(--blue)">${d}</div><div class="statl">완료</div></div>
+    <div class="statbox"><div class="statn" style="color:var(--red)">${ab}</div><div class="statl">결석</div></div>
+  </div>`;
+
+  if(!items.length){ el.innerHTML=html+'<div class="empty"><span class="ei">📅</span>이 날은 학원이 없어요</div>'; return; }
+
+  html += items.map(it=>`
+    <div class="parent-sc status-${it.status}">
+      <div class="schead" style="margin-bottom:0">
+        <div><div class="scname">${it.name}</div><div class="sctime" style="margin-top:4px">⏰ ${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div>
+        ${pill(it.status)}
+      </div>
+    </div>`).join('');
+  el.innerHTML = html;
+}
+
+// ── 관리자 화면 ───────────────────────────────────────────
 function renderAdmin(){
-  if(avView==='status'){ pView='today'; renderParent(); return; }
-  if(avView==='weekly'){ pView='weekly'; renderParent(); return; }
+  if(avView==='status'){ renderParent(); return; }
+  if(avView==='weekly'){ renderWeeklyInto(document.getElementById('content')); return; }
   const items=sorted(curDay), el=document.getElementById('content');
   const hOpts=Array.from({length:15},(_,i)=>i+9).map(h=>`<option value="${h}">${hl(h)}</option>`).join('');
   const mOpts=MINS.map(m=>`<option value="${m}">${m===0?'00분':m+'분'}</option>`).join('');
@@ -471,16 +606,15 @@ function renderAdmin(){
     <button class="addbtn" onclick="addSched()">추가하기</button>
   </div>`;
   if(!items.length) html+='<div class="empty"><span class="ei">📝</span>학원을 추가해보세요</div>';
-  else html+=items.map(it=>`<div class="sc"><div class="schead"><div><div class="scname">${it.name}</div><div class="sctime">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div><div class="edrow"><button class="edbtn" onclick="openOv('${curDay}','${it.id}')">수정</button><button class="edbtn del" onclick="delSched('${curDay}','${it.id}')">삭제</button></div></div></div>`).join('');
+  else html+=items.map(it=>`<div class="sc status-none"><div class="schead" style="margin-bottom:0"><div><div class="scname">${it.name}</div><div class="sctime">⏰ ${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div><div class="edrow"><button class="edbtn" onclick="openOv('${curDay}','${it.id}')">수정</button><button class="edbtn del" onclick="delSched('${curDay}','${it.id}')">삭제</button></div></div></div>`).join('');
   el.innerHTML=html;
   const nsh=document.getElementById('nsh'), neh=document.getElementById('neh');
   if(nsh&&neh){ nsh.addEventListener('change',()=>{ neh.value=Math.min(parseInt(nsh.value)+1,23); }); neh.value=10; }
 }
 
-// ── 주간 현황 렌더 ─────────────────────────────────────────────────
-function renderWeeklyInto(container, appendMode){
+// ── 주간 현황 ─────────────────────────────────────────────
+function renderWeeklyInto(container){
   const ti=todayI();
-  // 주간 전체 통계
   let totalAll=0,totalArrived=0,totalDone=0,totalAbsent=0;
   DAYS.forEach(d=>{
     const items=sched[d]||[];
@@ -497,48 +631,36 @@ function renderWeeklyInto(container, appendMode){
   DAYS.forEach((d,i)=>{
     const items=sorted(d);
     const isToday=i===ti;
-    const dots=items.map(it=>`<span class="wd ${it.status}"></span>`).join('');
-    const countTxt=items.length?`${items.length}개`:'-';
+    const dots=items.length ? items.map(it=>`<span class="wd ${it.status}"></span>`).join('') : '<span class="wd none"></span>';
+    const stLabel={none:'대기',arrived:'도착',done:'완료',absent:'결석'};
+    const stColor={none:'var(--text3)',arrived:'var(--green)',done:'var(--blue)',absent:'var(--red)'};
+    const stBg={none:'var(--bg3)',arrived:'var(--green-bg)',done:'var(--blue-bg)',absent:'var(--red-bg)'};
     const itemsHtml=items.length
-      ? items.map(it=>{
-          const stLabel={none:'대기',arrived:'도착',done:'완료',absent:'결석'};
-          const stColor={none:'var(--text3)',arrived:'var(--green)',done:'var(--blue)',absent:'var(--red)'};
-          return `<div class="week-item">
-            <div class="wi-bar ${it.status}"></div>
-            <div class="wi-info">
-              <div class="wi-name">${it.name}</div>
-              <div class="wi-time">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div>
-            </div>
-            <span class="wi-pill" style="background:${it.status==='none'?'var(--bg3)':it.status==='arrived'?'var(--green-bg)':it.status==='done'?'var(--blue-bg)':'var(--red-bg)'};color:${stColor[it.status]}">${stLabel[it.status]}</span>
-          </div>`;
-        }).join('')
-      : `<div class="week-empty">학원 없음</div>`;
+      ? items.map(it=>`<div class="week-item">
+          <div class="wi-bar ${it.status}"></div>
+          <div class="wi-info"><div class="wi-name">${it.name}</div><div class="wi-time">${tl(it.h,it.m)} ~ ${tl(it.eh,it.em)}</div></div>
+          <span class="wi-pill" style="background:${stBg[it.status]};color:${stColor[it.status]}">${stLabel[it.status]}</span>
+        </div>`).join('')
+      : '<div class="week-empty">학원 없음</div>';
     html+=`<div class="week-day">
-      <div class="week-day-head" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'':'none'">
-        <div class="week-day-label">
-          ${d}요일${isToday?'<span class="today-mark">오늘</span>':''}
-        </div>
-        <div class="week-day-meta">
-          <span class="week-count">${countTxt}</span>
-          <div class="week-dots">${dots||'<span class="wd none"></span>'}</div>
-        </div>
+      <div class="week-day-head">
+        <div class="week-day-label">${d}요일${isToday?'<span class="today-mark">오늘</span>':''}</div>
+        <div class="week-day-meta"><span class="week-count">${items.length?items.length+'개':'-'}</span><div class="week-dots">${dots}</div></div>
       </div>
-      <div class="week-items" style="${items.length===0||!isToday?'':''}">
-        ${itemsHtml}
-      </div>
+      <div class="week-items">${itemsHtml}</div>
     </div>`;
   });
   html+='</div>';
-  if(appendMode) container.innerHTML+=html;
-  else container.innerHTML=html;
+  container.innerHTML=html;
 }
 
-// ── ACTIONS ───────────────────────────────────────────────────────
+// ── ACTIONS ───────────────────────────────────────────────
 window.setSt = async function(day,id,status){
   await pushStatus(day,id,status);
   const m={arrived:'도착 완료! 아빠한테 전달됐어요 👍',done:'수업 종료! 수고했어요 🎉',absent:'결석 처리됐어요',none:'초기화됐어요'};
   showToast(m[status]||'');
 };
+
 window.addSched = async function(){
   const name=document.getElementById('nn').value.trim();
   const sh=parseInt(document.getElementById('nsh').value);
@@ -550,13 +672,13 @@ window.addSched = async function(){
   sched[curDay].push({id:uid(),name,h:sh,m:sm,eh,em,status:'none'});
   await pushSched(); scheduleAlarms(); render(); showToast('추가됐어요!');
 };
+
 window.delSched = async function(day,id){
   if(!confirm('삭제하시겠어요?')) return;
   sched[day]=sched[day].filter(i=>i.id!==id);
   await pushSched(); render(); showToast('삭제됐어요');
 };
 
-// OVERLAY
 window.openOv = function(day,id){
   editDay=day; editItem=sched[day].find(i=>i.id===id); if(!editItem) return;
   document.getElementById('ov-name').value=editItem.name;
@@ -581,30 +703,50 @@ window.saveOv = async function(){
 };
 document.getElementById('ov').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeOv(); });
 
-// ── ALARMS ────────────────────────────────────────────────────────
-function requestPerm(){ if(typeof Notification!=='undefined'&&Notification.permission==='default') Notification.requestPermission(); }
+// ── 알람 (10분 전 출발 알림 + 미체크시 아빠 알림) ─────────
 function scheduleAlarms(){
-  Object.values(alarmTimers).forEach(clearTimeout); alarmTimers={};
+  Object.values(alarmTimers).forEach(clearTimeout);
+  Object.values(missTimers).forEach(clearTimeout);
+  alarmTimers={}; missTimers={};
   const day=DAYS[todayI()], now=new Date();
   (sched[day]||[]).forEach(it=>{
+    // ① 출발 10분 전 알람 (아이 폰)
     let ah=it.h, am=it.m-10;
     if(am<0){ ah--; am+=60; }
-    const alarm=new Date(); alarm.setHours(ah,am,0,0);
-    const diff=alarm-now;
-    if(diff>0&&it.status==='none'){
+    const alarmTime=new Date(); alarmTime.setHours(ah,am,0,0);
+    const diff1=alarmTime-now;
+    if(diff1>0 && it.status==='none'){
       alarmTimers[it.id]=setTimeout(()=>{
         showToast(`⏰ ${it.name} 10분 후 시작!`);
-        if(typeof Notification!=='undefined'&&Notification.permission==='granted')
-          new Notification('📚 학원 출발 시간!',{body:`${it.name}이(가) 10분 후에 시작해요`,tag:'ack-'+it.id});
-      }, diff);
+        if(typeof Notification!=='undefined' && Notification.permission==='granted')
+          new Notification('📚 학원 출발 시간!',{body:`${it.name}이(가) 10분 후에 시작해요`,tag:'dep-'+it.id});
+      }, diff1);
+    }
+    // ② 학원 시작 시간 지나도 미체크 → 아빠에게 푸시 알림
+    const missTime=new Date(); missTime.setHours(it.h, it.m+10, 0, 0);
+    const diff2=missTime-now;
+    if(diff2>0 && it.status==='none'){
+      missTimers[it.id]=setTimeout(async ()=>{
+        const current=sched[day]?.find(i=>i.id===it.id);
+        if(current && current.status==='none'){
+          // 아이 폰에도 알림
+          showToast(`⚠️ ${it.name} 출석 체크 안 됐어요!`);
+          if(typeof Notification!=='undefined' && Notification.permission==='granted')
+            new Notification('⚠️ 출석 미확인',{body:`${it.name} 출석 체크가 안 됐어요`,tag:'miss-'+it.id});
+          // 아빠 폰에 FCM 푸시
+          await notifyParent('⚠️ 출석 미확인', `${it.name} 시작 후 10분이 지났는데 출석 체크가 없어요`);
+        }
+      }, diff2);
     }
   });
 }
 
-// ── TOAST ─────────────────────────────────────────────────────────
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),3000); }
-
-// global 노출 (inline onclick용)
+// ── TOAST ─────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),3500);
+}
 window.showToast=showToast;
 </script>
 </body>
